@@ -89,7 +89,13 @@ def main():
     comment = '\nUnclaimed PnP device info:'
     comment += '\nPnP Device Hostname: ' + pnp_device_name
     comment += '\nPnP Device Id: ' + pnp_device_id
+    
+   # get the floor id to assign device to using pnp
 
+    floor_id = dnac_apis.get_floor_id(site_name, 'Floor 1', dnac_token)
+    print('Floor Id: ', floor_id)
+
+    print('\nAP PnP Provisioning Started (this may take few minutes)')
 
     # start the claim process of the device to site
     claim_result = dnac_apis.pnp_claim_ap_site(pnp_device_id, floor_id, 'TYPICAL', dnac_token)
@@ -109,9 +115,6 @@ def main():
     comment = ''
     for status in status_list:
         comment += '\nPnP Device State: ' + status
-
-    # wait 60 seconds and check for inventory for AP info
-    time.sleep(60)
 
     # collect AP info
     ap_device_id = dnac_apis.get_device_id_name(pnp_device_name, dnac_token)
